@@ -1,0 +1,16 @@
+{
+  "name": "express-standart-route",
+  "version": "1.0.4",
+  "description": "A standart route like php on node js files",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "node-dir": "^0.1.17",
+    "path": "^0.12.7",
+    "recursive-readdir": "^2.2.1"
+  }
+}
