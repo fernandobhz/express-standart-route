@@ -1,8 +1,8 @@
 {
   "name": "express-standart-route",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A standart route like php on node js files",
-  "main": "index.js",
+  "main": "express-standart-route",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

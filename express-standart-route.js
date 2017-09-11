@@ -13,30 +13,21 @@ module.exports = async function(app, callback) {
 
 			files.sort();
 
-			//special files
+			//middlewares
 			for (file of files) {
 				var standalone = require(file);
-				var pathname = file.substr(routes.length, file.length - routes.length - 3);
-
-				// middleware special file
-				if ( pathname.endsWith('/_middleware') ) {
-					var pathname = pathname.substr(0, pathname.length - '/_middleware'.length);
-					app.use(pathname, standalone);
-					continue;
-				}
-
-				// partial "class" special file
-				if ( pathname.endsWith('/_partial') ) {
-					var pathname = pathname.substr(0, pathname.length - '/_partial'.length);
-					standalone(app, pathname);
-					continue;
-				}
-
-				// router special file
-				if ( pathname.endsWith('/_router') ) {
-					var pathname = pathname.substr(0, pathname.length - '/_router'.length);
-					app.use(pathname, standalone);
-					continue;
+				
+				if (standalone.middleware) {
+					//remove .js
+					var pathname = file.substr(routes.length, file.length - routes.length - 3);
+					
+					//remove ultima parte
+					var pathParts = pathname.split('/');
+					pathParts.pop();
+					
+					//rota
+					var pathname = pathParts.join('/');
+					app.use(pathname, standalone.middleware);				
 				}
 			}
 
@@ -55,8 +46,8 @@ module.exports = async function(app, callback) {
 				}).join('/');
 
 				// _index especial files
-				if ( pathname.endsWith('/_index') ) {
-					pathname = pathname.substr(0, pathname.length - '/_index'.length);
+				if ( pathname.endsWith('/index') ) {
+					pathname = pathname.substr(0, pathname.length - '/index'.length);
 				}
 
 				// example/example.js files (like index files)
@@ -81,32 +72,7 @@ module.exports = async function(app, callback) {
 				if ( standalone.post ) app.post(pathname, standalone.post);
 				if ( standalone.put ) app.put(pathname, standalone.put);
 				if ( standalone.delete ) app.delete(pathname, standalone.delete);
-			}
-
-			//public folders
-			var dir = require('node-dir');
-
-			dir.subdirs(views, function(err, subdirs) {
-				if (err) throw err;
-
-				for (subdir of subdirs) {
-					subdir = subdir.replace(/\\/g, '/');
-
-					if (subdir.endsWith('/_public')) {
-						//console.log(subdir);
-
-						var pathname = '/' + subdir.slice('views/'.length, subdir.length - '/_public'.length);
-						var publicDirectory = path.join(views, subdir);
-
-						/*console.log(pathname);
-						console.log(publicDirectory);
-						console.log();*/
-
-						//static files
-						app.use(pathname, express.static(publicDirectory));
-					}
-				}
-			});
+			}			
 
 			if (callback)
 				callback();
