@@ -69,6 +69,7 @@ module.exports = async function(app, callback) {
 
 				if ( standalone.partial ) standalone.partial(app, pathname);
 				if ( standalone.use ) app.use(pathname, standalone.use);
+				if ( standalone.router ) app.use(pathname, standalone.router);
 				if ( standalone.get ) app.get(pathname, standalone.get);
 				if ( standalone.post ) app.post(pathname, standalone.post);
 				if ( standalone.put ) app.put(pathname, standalone.put);
