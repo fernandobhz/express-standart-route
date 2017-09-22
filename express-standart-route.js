@@ -55,11 +55,12 @@ module.exports = async function(app, callback) {
 				var pathnameLast = pathnameParts.pop();
 				var pathnamePenultimate = pathnameParts.pop();
 
+				if ( pathnameLast ) pathnameLast = pathnameLast.replace(':', '');
+				if ( pathnamePenultimate ) pathnamePenultimate = pathnamePenultimate.replace(':', '');
+				
 				if ( pathnameLast == pathnamePenultimate ) {
 					pathname = pathname.substr(0, pathname.length - pathnameLast.length - 1);
 				}
-				
-				//console.log(pathname);
 
 				if ( typeof standalone == 'function' ) {
 					app.use(pathname, standalone);
