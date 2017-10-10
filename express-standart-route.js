@@ -1,4 +1,4 @@
-var recursiveReadDir = require('recursive-readdir');
+ var recursiveReadDir = require('recursive-readdir');
 var path = require('path');
 
 module.exports = async function(app, folder, extension) {
@@ -49,13 +49,22 @@ module.exports = async function(app, folder, extension) {
 						return part;
 				}).join('/');
 				
+				
+				// prevent the real file to be exposed to the web
+				app.use(file.substr(routes.length), function(req, res, next) {
+				  var err = new Error('Not Found');
+				  err.status = 404;
+				  next(err);
+				});
+				
+				
 				// _index especial files
 				if ( pathname.endsWith('/index') ) {
 					pathname = pathname.substr(0, pathname.length - '/index'.length);
 				}
 				
+				// output the pathname routed
 				console.log(pathname);
-
 
 				// example/example.js files (like index files)
 				var pathnameParts = pathname.split('/');
