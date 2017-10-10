@@ -1,6 +1,6 @@
 {
   "name": "express-standart-route",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "A standart route like php on node js files",
   "main": "express-standart-route",
   "scripts": {
